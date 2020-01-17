@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <table id="booksTable" class="table">
+            <thead>
+                <tr>
+                    <th>Titulo</th>
+                    <th>Id_Autor</th>
+                    <th>Id_Genero</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <input type="button" value="Cargar libros" id="loadBooks"/>
+            <div style="display: none;"id="messages">
+                <p></p>
+            </div>
+            <div style="display: none;"id="bookForm">
+                <hr/>
+                <table>
+                    <tr>
+                        <td>Titulo:</td>
+                        <td><input type="text" name="bookTitle" id="bookTitle"></td>
+                    </tr>
+                    <tr>
+                        <td>ID Autor:</td>
+                        <td><input type="number" name="bookAuthorId" id="bookAuthorId" min="1"></td>
+                    </tr>
+                    <tr>
+                        <td>ID Genero:</td>
+                        <td><input type="number" name="bookGenreId" id="bookGenreId" min="1"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input type="button" value="Guardar" id="bookSave"/></td>
+                    </tr>
+                </table>
+            </div>
+        </table>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $('#loadBooks').click( function() {
+            $('#messages').first('p').text('Cargando libros...');
+            $('#messages').show();
+            $.ajax( 
+                {
+                    'url': 'http://localhost:8000/books',
+                    'success' : function( data ) {
+                        $('#messages').hide();
+                        $('#booksTable > tbody').empty();
+                        for ( b in data ) {
+                            addBook( data[b] );
+                        }
+                        $('#bookForm').show();
+                    }
+                } 
+            );
+        } );
+
+        function addBook( book )
+        {
+            $('#booksTable tr:last').after('<tr><td>' + book.titulo + '</td><td>' + book.id_autor + '</td><td>' + book.id_genero + '</td></tr>');
+        }
+    </script>
+    </html>
