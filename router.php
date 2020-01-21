@@ -5,7 +5,8 @@ $matches = $_GET = [];
 
 // Excepcion para las  url principal sea index.html
 if (in_array( $_SERVER["REQUEST_URI"], [ '/index.html', '/', '' ] )) {
-    echo file_get_contents( '/Users/henrydsantiago/Google Drive/CURSOS/REST/index.html' );
+    //echo file_get_contents( '/Users/henrydsantiago/Google Drive/CURSOS/REST/index.html' );
+    echo file_get_contents( 'index.html' );
     die;
 }
 

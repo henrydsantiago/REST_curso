@@ -1,6 +1,6 @@
 <html>
     <head>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet"  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
     <body>
         <table id="booksTable" class="table">
@@ -42,27 +42,71 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript">
+
+
+        console.log(window.location.href + (window.location.href.substr(
+                    window.location.href.length - 1) == '/' ? '' : '/') + 'books');
+
+        function addBook( book )
+            {
+                console.log('Libro agregado');
+                $('#booksTable tr:last').after('<tr><td>' + book.titulo + '</td><td>' + book.id_autor + '</td><td>' + book.id_genero + '</td></tr>');
+            }
+
         $('#loadBooks').click( function() {
             $('#messages').first('p').text('Cargando libros...');
             $('#messages').show();
-            $.ajax( 
-                {
-                    'url': 'http://localhost:8000/books',
-                    'success' : function( data ) {
-                        $('#messages').hide();
-                        $('#booksTable > tbody').empty();
-                        for ( b in data ) {
-                            addBook( data[b] );
-                        }
-                        $('#bookForm').show();
+            $.ajax({
+                'url': window.location.href + (window.location.href.substr(
+                    window.location.href.length - 1) == '/' ? '' : '/') + 'books',
+                'success' : function( data ) {
+                    $('#messages').hide();
+                    $('#booksTable > tbody').empty();
+                    for ( b in data ) {
+                        addBook( data[b] );
                     }
-                } 
-            );
+                    $('#bookForm').show();
+                }
+            });
         } );
 
-        function addBook( book )
-        {
-            $('#booksTable tr:last').after('<tr><td>' + book.titulo + '</td><td>' + book.id_autor + '</td><td>' + book.id_genero + '</td></tr>');
-        }
+
+        $('#bookSave').click( function(){
+            var newBook = {
+                'titulo': $('#bookTitle').val(),
+                'id_autor': $('#bookAuthorId').val(),
+                'id_genero': $('#bookGenreId').val()
+            }
+
+            console.log(JSON.stringify(newBook));
+
+            $('#messages').first('p').text('Guardando Libro...');
+            $('#messages').show();
+
+            $.ajax({
+                'url': 'http://localhost:8000/books',
+                'method' : 'POST',
+                'data' : JSON.stringify( newBook ),
+                'beforeSend': function(){
+                    console.log('Agregando libro...');
+                    
+                },
+                'success' : function(data) {
+                    $('#messages').hide();
+                    addBook( newBook );                    
+                }
+            }); 
+
+ 
+
+            /* 
+            $.ajax(
+                'http://localhost:8000/books',
+                'POST');
+             */
+    });
+
+
     </script>
     </html>
+    

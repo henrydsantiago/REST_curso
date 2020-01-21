@@ -1,10 +1,6 @@
 <?php
 
-
-
-
-
-// Código comentado
+ // Código comentado
 /* if (true){
     /* Autenticación Access Tokens */
     /* if ( !array_key_exists( 'HTTP_X_TOKEN', $_SERVER ) ) {
@@ -85,9 +81,7 @@
     if( $user !== 'mauro' || $pwd !== '1234'){
         die;
     }
-} */
-
-
+} */ 
 //Definimos los recursos disponibles
 $allowedResourceTypes = [
     'books',
@@ -141,6 +135,7 @@ switch (strtoupper($_SERVER['REQUEST_METHOD'])){
     break;
 
     case 'POST':
+
         //Tomamos la entrada "cruda"
         $json = file_get_contents('php://input');
 
@@ -152,6 +147,7 @@ switch (strtoupper($_SERVER['REQUEST_METHOD'])){
 
         //Devuelve el arreglo de libros como si fuese GET
         echo json_encode( $books );
+    
     break;
 
     case 'PUT':
